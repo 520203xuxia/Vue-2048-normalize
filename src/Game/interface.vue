@@ -232,7 +232,10 @@
                 {
                     var answer=confirm("Game over!Do you want to try again?");
                     if(answer)
+                    {
                         this.newGame();
+                        return;
+                    }
                     else
                         return;
                 }
