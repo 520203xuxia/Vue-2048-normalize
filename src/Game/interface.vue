@@ -176,8 +176,6 @@
                     this.trim(arr);
                     this.merge(arr); 
                     temp[i]=arr;
-                       /* for(j=0;j<arr.length;j++)
-                            td_dom[j*4+i].innerText=arr[j];   */               
                 }
                 if(this.state)
                 {
@@ -214,15 +212,12 @@
                         else
                         {
                             arr[3-j]=parseInt(td_dom[i][j].innerText);
-                            //td_dom[i][j].innerText="";
                         }
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
                     temp[i]=arr;
-                        /*for(j=0;j<arr.length;j++)
-                            td_dom[i][3-j].innerText=arr[j];*/
                 }
                 if(this.state)
                 {
@@ -256,16 +251,12 @@
                         else
                         {
                             arr[3-j]=parseInt(td_dom[j*4+i].innerText);
-                            //td_dom[j*4+i].innerText="";
                         }
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
                     temp[i]=arr;
-                        /*for(j=0;j<arr.length;j++)
-                            td_dom[(3-j)*4+i].innerText=arr[j];*/
-                    
                 }     
                 if(this.state)
                 {
