@@ -19,7 +19,8 @@
 				number:{
 					num1:2,
 					num2:4
-				}
+				},
+                state:false
 			}
 		},
 		mounted:function(){
@@ -81,13 +82,17 @@
             trim:function(arr)//去除空格
             {
             	let i;
+                let flag=false;
                 for(i=0;i<arr.length;i++)
                 {
                     if(arr[i]==0)
                     {
                         arr.splice(i,1);
                         i--;
+                        flag=true;
                     }
+                    if(flag==true&&arr[i+1]!=0&&i+1<arr.length)
+                        this.state=true;
                 }
             },
             merge:function(arr)
@@ -97,6 +102,7 @@
                 {
                     if(arr[i+1]==arr[i])
                     {
+                        this.state=true;
                         arr[i]+=arr[i+1];
                         arr[i+1]=0;
                         this.trim(arr);
@@ -112,11 +118,11 @@
                 for(i=0;i<4;i++)
                 {
                     td_dom[i]=tr_dom[i].getElementsByTagName('td');
-                    console.log(td_dom[i]);
                 }
-
+                var temp=[];
                 for(i=0;i<4;i++)
                 {
+                    temp[i]=[];
                     var arr=[];
                     for(j=0;j<4;j++)
                     {
@@ -125,24 +131,37 @@
                         else
                         {
                             arr[j]=parseInt(td_dom[i][j].innerText);
-                            td_dom[i][j].innerText="";
                         }
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    for(j=0;j<arr.length;j++)
-                        td_dom[i][j].innerText=arr[j];
+                    temp[i]=arr;
                 }
+                if(this.state)
+                {
+                    for(i=0;i<4;i++)
+                    {
+                        for(j=0;j<4;j++)
+                            td_dom[i][j].innerText="";
+                        for(j=0;j<temp[i].length;j++)
+                            td_dom[i][j].innerText=temp[i][j];
+                    }
+                }
+                else
+                    return;
                 this.updated();
-                this.addone();               
+                this.addone();   
+                this.state=false;            
             },
             keyup:function()
             {
             	let i,j;
                 var td_dom=document.getElementsByTagName('td');
+                var temp=[];
                 for(i=0;i<4;i++)
                 {
+                    temp[i]=[];
                     var arr=[];
                     for(j=0;j<4;j++)
                     {
@@ -151,17 +170,30 @@
                         else
                         {
                             arr[j]=parseInt(td_dom[j*4+i].innerText);
-                            td_dom[j*4+i].innerText="";
                         }
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    for(j=0;j<arr.length;j++)
-                        td_dom[j*4+i].innerText=arr[j];
+                    temp[i]=arr;
+                       /* for(j=0;j<arr.length;j++)
+                            td_dom[j*4+i].innerText=arr[j];   */               
                 }
+                if(this.state)
+                {
+                    for(i=0;i<4;i++)
+                    {
+                        for(j=0;j<4;j++)
+                            td_dom[j*4+i].innerText="";
+                        for(j=0;j<temp[i].length;j++)
+                            td_dom[j*4+i].innerText=temp[i][j];
+                    }
+                }
+                else
+                    return;
                 this.updated();
                 this.addone();
+                this.state=false;
             },
             keyright:function()
             {
@@ -170,8 +202,10 @@
                 var td_dom=[];
                 for( i=0;i<4;i++)
                     td_dom[i]=tr_dom[i].getElementsByTagName('td');
+                var temp=[];
                 for(i=0;i<4;i++)                   
                 {
+                    temp[i]=[];
                     var arr=[];
                     for(j=3;j>=0;j--)
                     {
@@ -180,24 +214,40 @@
                         else
                         {
                             arr[3-j]=parseInt(td_dom[i][j].innerText);
-                            td_dom[i][j].innerText="";
+                            //td_dom[i][j].innerText="";
                         }
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    for(j=0;j<arr.length;j++)
-                        td_dom[i][3-j].innerText=arr[j];
+                    temp[i]=arr;
+                        /*for(j=0;j<arr.length;j++)
+                            td_dom[i][3-j].innerText=arr[j];*/
                 }
+                if(this.state)
+                {
+                    for(i=0;i<4;i++)
+                    {
+                        for(j=0;j<4;j++)
+                            td_dom[i][j].innerText="";
+                        for(j=0;j<temp[i].length;j++)
+                            td_dom[i][3-j].innerText=temp[i][j];
+                    }
+                }
+                else
+                    return;
                 this.updated();
                 this.addone();
+                this.state=false;
             },
             keydown:function()
             {
             	let i,j;
                 var td_dom=document.getElementsByTagName('td');
+                var temp=[];
                 for(i=0;i<4;i++)
                 {
+                    temp[i]=[];
                     var arr=[];
                     for(j=3;j>=0;j--)
                     {
@@ -206,17 +256,34 @@
                         else
                         {
                             arr[3-j]=parseInt(td_dom[j*4+i].innerText);
-                            td_dom[j*4+i].innerText="";
+                            //td_dom[j*4+i].innerText="";
                         }
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    for(j=0;j<arr.length;j++)
-                        td_dom[(3-j)*4+i].innerText=arr[j];
-                }               
+                    temp[i]=arr;
+                        /*for(j=0;j<arr.length;j++)
+                            td_dom[(3-j)*4+i].innerText=arr[j];*/
+                    
+                }     
+                if(this.state)
+                {
+                    for(i=0;i<4;i++)
+                    {
+                        for(j=0;j<4;j++)
+                            td_dom[j*4+i].innerText="";
+                        for(j=0;j<temp[i].length;j++)
+                        {
+                                td_dom[(3-j)*4+i].innerText=temp[i][j];   
+                        }
+                    }
+                } 
+                else
+                    return;         
                 this.updated();
                 this.addone();
+                this.state=false;
             },
             addone:function()
             {
