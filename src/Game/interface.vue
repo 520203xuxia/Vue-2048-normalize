@@ -3,10 +3,9 @@
 		<button class="btn btn-info" @click="newGame()">New Game</button>
 		<table>
 			<tr v-for="i in 4">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td v-for=" j in 4" >
+                    {{number.num[(i-1)*4+j-1]}}            
+                </td>
 			</tr>
 		</table>
 	</div>
@@ -17,24 +16,23 @@
 		data(){
 			return {
 				number:{
-					num1:2,
-					num2:4
+					num:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 				},
                 state:false
 			}
 		},
-		mounted:function(){
+        created:function(){
             var init1=parseInt(Math.random()*16);
             var init2=parseInt(Math.random()*16);
-            var td_dom=document.getElementsByTagName('td');           
+           // var td_dom=document.getElementsByTagName('td');           
             while(init2==init1)
             {
                 init2=parseInt(Math.random()*16);
             }          
-                td_dom[init1].innerText=this.number.num1;
-                td_dom[init1].style.background="rgb(238, 228, 189)";
-                td_dom[init2].innerText=this.number.num1;
-                td_dom[init2].style.background="rgb(238, 228, 189)";
+                this.number.num[init1]=2;
+                this.number.num[init2]=2;
+        },
+		mounted:function(){           
                 var that=this;
                 document.onkeydown=function(e){
                 that.control(e);
@@ -55,9 +53,9 @@
                 {
                     init2=parseInt(Math.random()*16);
                 }          
-                    td_dom[init1].innerText=this.number.num1;
+                    td_dom[init1].innerText=2;
                     
-                    td_dom[init2].innerText=this.number.num1;
+                    td_dom[init2].innerText=2;
                     this.updated();
             },
             control:function(event){
