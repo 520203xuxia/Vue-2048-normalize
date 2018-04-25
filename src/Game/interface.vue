@@ -4,13 +4,12 @@
 		<table>
 			<tr v-for="i in 4">
 				<td v-for=" j in 4" >
-                    {{number.num[(i-1)*4+j-1]}}            
+                    <span  v-if="number.num[(i-1)*4+j-1]!=0">{{number.num[(i-1)*4+j-1]}} </span>           
                 </td>
 			</tr>
 		</table>
 	</div>
 </template>
-
 <script>
 	export default{
 		data(){
@@ -18,25 +17,26 @@
 				number:{
 					num:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 				},
-                state:false
+                state:false,
+                style:{
+
+                }
 			}
 		},
-        created:function(){
+		mounted:function(){  
             var init1=parseInt(Math.random()*16);
             var init2=parseInt(Math.random()*16);
-           // var td_dom=document.getElementsByTagName('td');           
             while(init2==init1)
             {
                 init2=parseInt(Math.random()*16);
             }          
-                this.number.num[init1]=2;
-                this.number.num[init2]=2;
-        },
-		mounted:function(){           
+                this.number.num.splice(init1,1,2);  
+                this.number.num.splice(init2,1,2);        
                 var that=this;
                 document.onkeydown=function(e){
-                that.control(e);
+                    that.control(e);
                 }
+                this.updated();
         },
 		methods:
         {
@@ -45,18 +45,18 @@
             	let i;
                 var init1=parseInt(Math.random()*16);
                 var init2=parseInt(Math.random()*16);
-                var td_dom=document.getElementsByTagName('td');
-                for( i=0;i<td_dom.length;i++)
-                    td_dom[i].innerText="";
-                
+                for( i=0;i<16;i++)
+                {
+                    this.number.num.splice(i,1,0);               
+                }      
+
                 while(init2==init1)
                 {
                     init2=parseInt(Math.random()*16);
-                }          
-                    td_dom[init1].innerText=2;
-                    
-                    td_dom[init2].innerText=2;
-                    this.updated();
+                }
+                this.number.num.splice(init1,1,2);  
+                this.number.num.splice(init2,1,2);                           
+                this.updated();
             },
             control:function(event){
                 if(event.keyCode==37)
@@ -111,51 +111,31 @@
             {
             	let i;
             	let j;
-                var tr_dom=document.getElementsByTagName('tr');
-                var td_dom=[];
                 for(i=0;i<4;i++)
                 {
-                    td_dom[i]=tr_dom[i].getElementsByTagName('td');
-                }
-                var temp=[];
-                for(i=0;i<4;i++)
-                {
-                    temp[i]=[];
                     var arr=[];
                     for(j=0;j<4;j++)
                     {
-                        if(td_dom[i][j].innerText=="")
-                            arr[j]=0;
-                        else
-                        {
-                            arr[j]=parseInt(td_dom[i][j].innerText);
-                        }
-                        
+                        arr[j]=this.number.num[i*4+j];
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    temp[i]=arr;
+                    for(j=0;j<arr.length;j++)
+                        this.number.num.splice(i*4+j,1,arr[j]);
+                    for(;j<4;j++)
+                        this.number.num.splice(i*4+j,1,0);
                 }
                 if(this.state)
                 {
-                    for(i=0;i<4;i++)
-                    {
-                        for(j=0;j<4;j++)
-                            td_dom[i][j].innerText="";
-                        for(j=0;j<temp[i].length;j++)
-                            td_dom[i][j].innerText=temp[i][j];
-                    }
+                    this.addone();   
+                    this.state=false;  
+                    this.updated(); 
                 }
-                else
-                    return;
-                this.updated();
-                this.addone();   
-                this.state=false;            
+                
             },
             keyup:function()
             {
             	let i,j;
-                var td_dom=document.getElementsByTagName('td');
                 var temp=[];
                 for(i=0;i<4;i++)
                 {
@@ -163,125 +143,86 @@
                     var arr=[];
                     for(j=0;j<4;j++)
                     {
-                        if(td_dom[j*4+i].innerText=="")
-                            arr[j]=0;
-                        else
-                        {
-                            arr[j]=parseInt(td_dom[j*4+i].innerText);
-                        }
-                        
+                        arr[j]=this.number.num[j*4+i];
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    temp[i]=arr;
+                    for(j=0;j<arr.length;j++)
+                        this.number.num.splice(j*4+i,1,arr[j]);
+                    for(;j<4;j++)
+                        this.number.num.splice(j*4+i,1,0);
                 }
                 if(this.state)
                 {
-                    for(i=0;i<4;i++)
-                    {
-                        for(j=0;j<4;j++)
-                            td_dom[j*4+i].innerText="";
-                        for(j=0;j<temp[i].length;j++)
-                            td_dom[j*4+i].innerText=temp[i][j];
-                    }
-                }
-                else
-                    return;
-                this.updated();
-                this.addone();
-                this.state=false;
+                    this.addone();
+                    this.state=false;
+                    this.updated();    
+                }    
+                    
             },
             keyright:function()
             {
             	let i,j;
-                var tr_dom=document.getElementsByTagName('tr');
-                var td_dom=[];
-                for( i=0;i<4;i++)
-                    td_dom[i]=tr_dom[i].getElementsByTagName('td');
-                var temp=[];
                 for(i=0;i<4;i++)                   
                 {
-                    temp[i]=[];
                     var arr=[];
                     for(j=3;j>=0;j--)
                     {
-                        if(td_dom[i][j].innerText=="")
-                            arr[3-j]=0;
-                        else
-                        {
-                            arr[3-j]=parseInt(td_dom[i][j].innerText);
-                        }
+                        arr[3-j]=this.number.num[i*4+j];
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    temp[i]=arr;
+                    //temp[i]=arr;
+                    for(j=0;j<arr.length;j++)
+                        this.number.num.splice(i*4+3-j,1,arr[j]);
+                    for(;j<4;j++)
+                        this.number.num.splice(i*4+3-j,1,0);
                 }
                 if(this.state)
                 {
-                    for(i=0;i<4;i++)
-                    {
-                        for(j=0;j<4;j++)
-                            td_dom[i][j].innerText="";
-                        for(j=0;j<temp[i].length;j++)
-                            td_dom[i][3-j].innerText=temp[i][j];
-                    }
+                     this.addone();
+                     this.state=false;
+                     this.updated();
                 }
-                else
-                    return;
-                this.updated();
-                this.addone();
-                this.state=false;
+                
             },
             keydown:function()
             {
             	let i,j;
-                var td_dom=document.getElementsByTagName('td');
-                var temp=[];
                 for(i=0;i<4;i++)
                 {
-                    temp[i]=[];
                     var arr=[];
                     for(j=3;j>=0;j--)
                     {
-                        if(td_dom[j*4+i].innerText=="")
-                            arr[3-j]=0;
-                        else
-                        {
-                            arr[3-j]=parseInt(td_dom[j*4+i].innerText);
-                        }
+                        
+                        arr[3-j]=this.number.num[j*4+i];
                         
                     }
                     this.trim(arr);
                     this.merge(arr); 
-                    temp[i]=arr;
+                    for(j=0;j<arr.length;j++)
+                    {
+                        this.number.num.splice((3-j)*4+i,1,arr[j]);
+                    }
+                    for(;j<4;j++)
+                        this.number.num.splice((3-j)*4+i,1,0);
                 }     
                 if(this.state)
                 {
-                    for(i=0;i<4;i++)
-                    {
-                        for(j=0;j<4;j++)
-                            td_dom[j*4+i].innerText="";
-                        for(j=0;j<temp[i].length;j++)
-                        {
-                                td_dom[(3-j)*4+i].innerText=temp[i][j];   
-                        }
-                    }
-                } 
-                else
-                    return;         
-                this.updated();
-                this.addone();
-                this.state=false;
+                    this.addone();
+                    this.state=false;  
+                    this.updated();                 
+                }    
+                       
             },
             addone:function()
             {
                 let count=0;
                 let i,j;
-                var td_dom=document.getElementsByTagName('td');
                 for( i=0;i<16;i++)
                 {
-                    if(td_dom[i].innerText!='')
+                    if(this.number.num[i]!=0)
                         count++;
                 }
                 if(count==16)
@@ -296,16 +237,15 @@
                         return;
                 }
                 var addnum=parseInt(Math.random()*16);
-                while(document.getElementsByTagName('td')[addnum].innerText!="")
+                while(this.number.num[addnum]!=0)
                 {
                     addnum=parseInt(Math.random()*16);
                 }
                 var choose=parseInt(Math.random()*10);
                 if(choose%2==0)
-                    document.getElementsByTagName('td')[addnum].innerText=2;
+                    this.number.num.splice(addnum,1,2);
                 else
-                     document.getElementsByTagName('td')[addnum].innerText=4;
-                document.getElementsByTagName('td')[addnum].style.background="rgb(238, 228, 189)";
+                    this.number.num.splice(addnum,1,4);
             },
             updated:function()
             {
@@ -313,9 +253,10 @@
                 var td_dom=document.getElementsByTagName('td');
                 for( i=0;i<td_dom.length;i++)
                 {
-                    if(td_dom[i].innerText!='')
+                   // console.log(i+":"+td_dom[i].innerText);
+                    if(this.number.num[i]!=0)
                     {
-                        var num=parseInt(td_dom[i].innerText);
+                        var num=this.number.num[i];
                         switch(num){
                             case 2:
                             td_dom[i].style.background="rgb(238, 228, 189)";
@@ -347,10 +288,9 @@
                             td_dom[i].style.background="rgb(181, 54, 77)";       
                             break;
                             default:
-
                         }
                     }
-                    else if(td_dom[i].innerText=='')
+                    else if(this.number.num[i]==0)
                     {
                         td_dom[i].style.background="rgb(205, 191, 179)";
                     }
