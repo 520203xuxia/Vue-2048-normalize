@@ -3,7 +3,7 @@
 		<button class="btn btn-info" @click="newGame()">New Game</button>
 		<table>
 			<tr v-for="i in 4">
-				<td v-for=" j in 4" >
+				<td v-for=" j in 4" v-bind:class="style[number.num[(i-1)*4+j-1]]" >
                     <span  v-if="number.num[(i-1)*4+j-1]!=0">{{number.num[(i-1)*4+j-1]}} </span>           
                 </td>
 			</tr>
@@ -19,7 +19,17 @@
 				},
                 state:false,
                 style:{
-
+                    '2':"num2",
+                    '4':"num4",
+                    '8':"num8",
+                    '16':"num16",
+                    '32':"num32",
+                    '64':"num64",
+                    '128':"num128",
+                    '256':"num256",
+                    '512':"num512",
+                    '1024':"num1024",
+                    '2048':"num2048"
                 }
 			}
 		},
@@ -30,13 +40,13 @@
             {
                 init2=parseInt(Math.random()*16);
             }          
-                this.number.num.splice(init1,1,2);  
+                this.number.num.splice(init1,1,2);  //不能直接给num[init1]赋值，这不是响应式的，不能在view上显示出来
                 this.number.num.splice(init2,1,2);        
                 var that=this;
                 document.onkeydown=function(e){
                     that.control(e);
                 }
-                this.updated();
+                //this.updated();
         },
 		methods:
         {
@@ -56,7 +66,7 @@
                 }
                 this.number.num.splice(init1,1,2);  
                 this.number.num.splice(init2,1,2);                           
-                this.updated();
+                //this.updated();
             },
             control:function(event){
                 if(event.keyCode==37)
@@ -129,7 +139,7 @@
                 {
                     this.addone();   
                     this.state=false;  
-                    this.updated(); 
+                   // this.updated(); 
                 }
                 
             },
@@ -156,7 +166,7 @@
                 {
                     this.addone();
                     this.state=false;
-                    this.updated();    
+                   // this.updated();    
                 }    
                     
             },
@@ -183,7 +193,7 @@
                 {
                      this.addone();
                      this.state=false;
-                     this.updated();
+                     //this.updated();
                 }
                 
             },
@@ -212,7 +222,7 @@
                 {
                     this.addone();
                     this.state=false;  
-                    this.updated();                 
+                   // this.updated();                 
                 }    
                        
             },
@@ -247,7 +257,7 @@
                 else
                     this.number.num.splice(addnum,1,4);
             },
-            updated:function()
+           /* updated:function()
             {
             	let i;
                 var td_dom=document.getElementsByTagName('td');
@@ -295,7 +305,7 @@
                         td_dom[i].style.background="rgb(205, 191, 179)";
                     }
                 }
-            }
+            }*/
         },
 	};
 </script>
@@ -321,5 +331,38 @@
             margin: 5px;
             border-radius: 10px;
             padding-top: 20px;
+        }
+        .num2{
+            background: rgb(238, 228, 189) !important ;
+        }
+        .num4{
+            background: rgb(210, 214, 218)  !important;
+        }
+        .num8{
+            background:rgb(169, 200, 218)  !important;
+        }
+        .num16{
+            background:rgb(131, 200, 213)  !important;
+        }
+         .num32{
+            background:rgb(25, 166, 222)  !important;
+        }
+         .num64{
+            background:rgb(92, 154, 222)  !important;
+        }
+         .num128{
+            background:rgb(142, 155, 255)  !important;
+        }
+        .num256{
+            background:rgb(92, 154, 222)  !important;
+        }
+         .num512{
+            background:rgb(92, 154, 222)  !important;
+        }
+         .num1024{
+            background:rgb(92, 154, 222)  !important;
+        }
+         .num2048{
+            background:rgb(181, 54, 77)  !important;
         }
 </style>
