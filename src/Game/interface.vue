@@ -8,6 +8,7 @@
                 </td>
 			</tr>
 		</table>
+        
 	</div>
 </template>
 <script>
@@ -135,6 +136,11 @@
                     for(;j<4;j++)
                         this.number.num.splice(i*4+j,1,0);
                 }
+                var max=Math.max.apply(Math,this.number.num);
+                if(max==2048)
+                {
+                    this.success();
+                }
                 if(this.state)
                 {
                     this.addone();   
@@ -162,6 +168,11 @@
                     for(;j<4;j++)
                         this.number.num.splice(j*4+i,1,0);
                 }
+                var max=Math.max.apply(Math,this.number.num);
+                if(max==2048)
+                {
+                    this.success();
+                }
                 if(this.state)
                 {
                     this.addone();
@@ -188,6 +199,11 @@
                         this.number.num.splice(i*4+3-j,1,arr[j]);
                     for(;j<4;j++)
                         this.number.num.splice(i*4+3-j,1,0);
+                }
+                var max=Math.max.apply(Math,this.number.num);
+                if(max==2048)
+                {
+                    this.success();
                 }
                 if(this.state)
                 {
@@ -217,7 +233,12 @@
                     }
                     for(;j<4;j++)
                         this.number.num.splice((3-j)*4+i,1,0);
-                }     
+                }  
+                var max=Math.max.apply(Math,this.number.num);
+                if(max==2048)
+                {
+                    this.success();
+                }   
                 if(this.state)
                 {
                     this.addone();
@@ -307,6 +328,10 @@
                 }
             }*/
         },
+        success:function()
+        {
+            alert("恭喜你！");
+        }
 	};
 </script>
 
